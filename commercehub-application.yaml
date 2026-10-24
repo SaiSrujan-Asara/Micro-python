@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: commercehub-gitops
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/SaiSrujan-Asara/Micro-python.git
+    targetRevision: main
+    path: commercehub
+    helm:
+      releaseName: commercehub-gitops
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: commercehub-gitops
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
