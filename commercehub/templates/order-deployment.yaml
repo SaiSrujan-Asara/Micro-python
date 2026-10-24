@@ -1,0 +1,43 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commercehub-order
+  labels:
+    app.kubernetes.io/name: commercehub-order
+    app.kubernetes.io/part-of: commercehub
+spec:
+  replicas: {{ .Values.orderService.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: commercehub-order
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: commercehub-order
+        app.kubernetes.io/part-of: commercehub
+    spec:
+      containers:
+        - name: order-service
+          image: "{{ .Values.orderService.image.repository }}:{{ .Values.orderService.image.tag }}"
+          imagePullPolicy: {{ .Values.orderService.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: PRODUCT_SERVICE_URL
+              value: {{ .Values.orderService.productServiceUrl | quote }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.orderService.resources | nindent 12 }}
