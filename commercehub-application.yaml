@@ -18,5 +18,8 @@ spec:
     namespace: commercehub-gitops
 
   syncPolicy:
+    automated:
+      selfHeal: true
+      prune: false
     syncOptions:
       - CreateNamespace=true
