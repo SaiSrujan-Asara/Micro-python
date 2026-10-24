@@ -28,7 +28,10 @@ spec:
             - name: PRODUCT_SERVICE_URL
               value: {{ .Values.orderService.productServiceUrl | quote }}
             - name: DATABASE_URL
-              value: {{ .Values.orderService.databaseUrl | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: commercehub-postgres
+                  key: DATABASE_URL
           readinessProbe:
             httpGet:
               path: /health
