@@ -27,6 +27,8 @@ spec:
           env:
             - name: PRODUCT_SERVICE_URL
               value: {{ .Values.orderService.productServiceUrl | quote }}
+            - name: DATABASE_URL
+              value: {{ .Values.orderService.databaseUrl | quote }}
           readinessProbe:
             httpGet:
               path: /health

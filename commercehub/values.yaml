@@ -20,18 +20,15 @@ productService:
 
 orderService:
   replicaCount: 2
-
   image:
     repository: order-service
     tag: "1.0.0"
     pullPolicy: IfNotPresent
-
   service:
     type: ClusterIP
     port: 8000
-
   productServiceUrl: "http://commercehub-product:8000"
-
+  databaseUrl: "postgresql+psycopg://commercehub:change-me-local-only@commercehub-postgres:5432/commercehub"
   resources:
     requests:
       cpu: 100m
@@ -39,3 +36,15 @@ orderService:
     limits:
       cpu: 500m
       memory: 256Mi
+
+postgresql:
+  createSecret: false
+  image:
+    repository: postgres
+    tag: "16"
+    pullPolicy: IfNotPresent
+  storage:
+    size: 2Gi
+    storageClassName: standard
+  database: commercehub
+  username: commercehub

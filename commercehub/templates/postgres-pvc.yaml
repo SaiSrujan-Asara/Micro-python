@@ -1,0 +1,14 @@
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: commercehub-postgres-data
+  labels:
+    app.kubernetes.io/part-of: commercehub
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.postgresql.storage.storageClassName | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.postgresql.storage.size | quote }}
